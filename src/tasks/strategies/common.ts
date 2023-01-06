@@ -8,9 +8,10 @@ function distillateAdvs(): number {
   return Math.round(get("familiarSweat") ** 0.4);
 }
 
-export function stooper(): Task {
+export function stooper(after: string[]): Task {
   return {
     name: "Stooper",
+    after: after,
     ready: () => distillateAdvs() >= 9 && !canConsume(), // Check organs just to be safe
     completed: () => myInebriety() >= stooperInebrietyLimit(),
     do: () => cliExecute("drink stillsuit distillate"),
@@ -18,9 +19,10 @@ export function stooper(): Task {
   };
 }
 
-export function caldera(): Task {
+export function caldera(after: string[]): Task {
   return {
     name: "Caldera",
+    after: after,
     completed: () =>
       $location`The Bubblin' Caldera`.turnsSpent >= 7 ||
       $location`The Bubblin' Caldera`.noncombatQueue.includes("Lava Dogs"),
@@ -46,7 +48,7 @@ export function caldera(): Task {
       acc3: $item`Mr. Screege's spectacles`,
       familiar: $familiar`Puck Man`,
       famequip: $item`orange boxing gloves`,
-      modifier: "mainstat",
+      modifier: "muscle",
     },
     combat: new CombatStrategy().macro(Macro.attack().repeat()),
     limit: { tries: 10 }, // Clear intro adventure

@@ -53,7 +53,7 @@ export function pullAll(): Task {
   };
 }
 
-export function kingFreed(): Task[] {
+export function breakfast(): Task[] {
   return [
     {
       name: "Closet Meat",
@@ -68,16 +68,13 @@ export function kingFreed(): Task[] {
       limit: { tries: 1 },
     },
     {
-      name: "Astral Constainer",
+      name: "Astral Container",
       completed: () => astralContainers.every((item) => !have(item)),
-      do: () =>
-        astralContainers.forEach((item) => {
-          if (have(item)) use(item);
-        }),
+      do: () => astralContainers.filter((item) => have(item)).forEach((item) => use(item)),
       limit: { tries: 1 },
     },
     {
-      name: "Every Skill",
+      name: "Book of Every Skill",
       completed: () => get("_bookOfEverySkillUsed", false),
       do: () => use($item`The Big Book of Every Skill`),
       limit: { tries: 1 },
@@ -96,7 +93,7 @@ export function kingFreed(): Task[] {
     },
     {
       name: "Duplicate",
-      ready: () => have(args.minor.duplicate) && get("encountersUntilDMTChoice") < 1,
+      ready: () => have(args.minor.duplicate) && get("encountersUntilDMTChoice") === 0,
       completed: () => get("lastDMTDuplication") >= myAscensions(),
       prepare: () => set("choiceAdventure1125", `1&iid=${toInt(args.minor.duplicate)}`),
       do: $location`The Deep Machine Tunnels`,
@@ -106,11 +103,6 @@ export function kingFreed(): Task[] {
       outfit: { familiar: $familiar`Machine Elf` },
       limit: { tries: 1 },
     },
-  ];
-}
-
-export function breakfast(): Task[] {
-  return [
     {
       name: "Breakfast",
       completed: () => get("breakfastCompleted"),

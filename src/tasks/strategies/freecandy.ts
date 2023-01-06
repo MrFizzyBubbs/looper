@@ -6,9 +6,10 @@ import { Strategy } from "./strategy";
 
 export function freecandy(): Strategy {
   return {
-    tasks: (ascend: boolean) => [
+    tasks: (ascend: boolean, after: string[]) => [
       {
         name: "Garboween",
+        after: after,
         completed: () => get("_fullday_completedGarboween", false) && !canConsume(),
         do: () => cliExecuteThrow(`garboween yachtzeechain ${ascend ? "ascend" : ""}`),
         post: () => set("_fullday_completedGarboween", true),
@@ -16,13 +17,8 @@ export function freecandy(): Strategy {
         tracking: "Garbo",
       },
       {
-        name: "Treat Outfit",
-        completed: () => get("freecandy_treatOutfit") === "Ceramic Suit",
-        do: () => set("freecandy_treatOutfit", "Ceramic Suit"),
-        limit: { tries: 1 },
-      },
-      {
         name: "Freecandy",
+        after: [...after, "Garboween"],
         completed: () => myAdventures() < 5 || myInebriety() >= stooperInebrietyLimit(),
         do: () => cliExecuteThrow("freecandy"),
         outfit: {
@@ -32,9 +28,10 @@ export function freecandy(): Strategy {
         limit: { tries: 1 },
         tracking: "Freecandy",
       },
-      stooper(),
+      stooper([...after, "Freecandy"]),
       {
         name: "Overdrink",
+        after: [...after, "Stooper"],
         completed: () => myInebriety() > stooperInebrietyLimit(),
         do: () =>
           withProperty("spiceMelangeUsed", true, () =>
@@ -43,9 +40,10 @@ export function freecandy(): Strategy {
         outfit: { familiar: $familiar`Stooper` },
         limit: { tries: 1 },
       },
-      ...(ascend ? [caldera()] : []),
+      ...(ascend ? [caldera([...after, "Overdrink"])] : []),
       {
         name: "Overdrunk",
+        after: [...after, "Overdrink"],
         ready: () => myInebriety() > stooperInebrietyLimit(),
         completed: () => myAdventures() < 5,
         do: () => cliExecuteThrow("freecandy"),
@@ -60,6 +58,7 @@ export function freecandy(): Strategy {
         ? [
             {
               name: "Combo",
+              after: [...after, "Overdrunk"],
               completed: () => myAdventures() === 0,
               do: () => cliExecuteThrow(`combo ${myAdventures()}`),
               limit: { tries: 1 },

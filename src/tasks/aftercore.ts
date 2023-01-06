@@ -11,7 +11,7 @@ export function aftercoreQuest(strategy: Strategy): Quest {
       ...breakfast(),
       ...duffo(),
       ...menagerie(),
-      ...strategy.tasks(true),
+      ...strategy.tasks(true, []),
       ...pvp([]),
     ],
   };

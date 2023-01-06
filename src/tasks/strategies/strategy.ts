@@ -6,7 +6,7 @@ import { garbo } from "./garbo";
 import { baggo } from "./baggo";
 
 export type Strategy = {
-  tasks: (ascend: boolean) => Task[];
+  tasks: (ascend: boolean, after: string[] = []) => Task[];
   gyou?: { pulls: Item[]; ronin: Task["do"]; postronin: Task["do"] };
 };
 

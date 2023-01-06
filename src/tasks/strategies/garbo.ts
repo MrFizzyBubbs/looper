@@ -6,18 +6,20 @@ import { Strategy } from "./strategy";
 
 export function garbo(): Strategy {
   return {
-    tasks: (ascend: boolean) => [
+    tasks: (ascend: boolean, after: string[]) => [
       {
         name: "Garbo",
+        after: after,
         completed: () =>
           (myAdventures() === 0 && !canConsume()) || myInebriety() >= stooperInebrietyLimit(),
         do: () => cliExecuteThrow(`garbo yachtzeechain ${ascend ? "ascend" : ""}`),
         limit: { tries: 1 },
         tracking: "Garbo",
       },
-      stooper(),
+      stooper([...after, "Garbo"]),
       {
         name: "Overdrink",
+        after: [...after, "Stooper"],
         completed: () => myInebriety() > stooperInebrietyLimit(),
         do: () =>
           withProperty("spiceMelangeUsed", true, () =>
@@ -28,9 +30,10 @@ export function garbo(): Strategy {
       },
       ...(ascend
         ? [
-            caldera(),
+            caldera([...after, "Overdrink"]),
             {
               name: "Overdrunk",
+              after: [...after, "Overdrink"],
               ready: () => myInebriety() > inebrietyLimit(),
               completed: () => myAdventures() === 0,
               do: () => cliExecuteThrow("garbo ascend"),
