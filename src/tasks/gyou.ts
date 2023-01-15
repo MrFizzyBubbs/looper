@@ -3,9 +3,9 @@ import {
   autosell,
   buy,
   buyUsingStorage,
+  canInteract,
   cliExecute,
   descToItem,
-  Familiar,
   getFuel,
   getWorkshed,
   Item,
@@ -13,8 +13,10 @@ import {
   myAdventures,
   myClass,
   myLevel,
+  myMaxhp,
   myPath,
   myTurncount,
+  restoreHp,
   restoreMp,
   runChoice,
   storageAmount,
@@ -28,6 +30,7 @@ import {
   $effects,
   $familiar,
   $item,
+  $items,
   $location,
   $monster,
   $path,
@@ -37,6 +40,7 @@ import {
   AsdonMartin,
   get,
   getKramcoWandererChance,
+  getModifier,
   have,
   Lifestyle,
   Macro,
@@ -92,7 +96,7 @@ const gear: Task[] = [
 export function createPull(item: Item): Task {
   return {
     name: item.name,
-    completed: () => have(item),
+    completed: () => have(item) || canInteract(),
     do: () => cliExecute(`pull ${item}`),
     limit: { tries: 1 },
   };
@@ -140,9 +144,9 @@ export function gyouQuest(strategy: Strategy): Quest {
         ? {
             name: "In-Run Farm Initial",
             completed: () => myTurncount() >= 1000,
-            do: strategy.gyou.ronin,
             limit: { tries: 1 },
             tracking: "GooFarming",
+            ...strategy.gyou.ronin,
           }
         : {
             name: "In-Run Barf Initial",
@@ -241,9 +245,9 @@ export function gyouQuest(strategy: Strategy): Quest {
         ? {
             name: "In-Run Farm Final",
             completed: () => myAdventures() <= 40 || myClass() !== $class`Grey Goo`,
-            do: strategy.gyou.postronin,
             tracking: "GooFarming",
             limit: { tries: 1 },
+            ...strategy.gyou.postronin,
           }
         : {
             name: "In-Run Barf Final",
@@ -294,20 +298,51 @@ export function gyouQuest(strategy: Strategy): Quest {
         name: "Prism",
         completed: () => myClass() !== $class`Grey Goo`,
         do: () => cliExecute("loopgyou class=1"),
-        outfit: { familiar: Familiar.none },
+        // Stats reset on prism break, equip glitch kill equipment prior
+        outfit: () => ({
+          familiar: $familiar`Shorter-Order Cook`,
+          ...(have($item`January's Garbage Tote`) && have($skill`Torso Awareness`)
+            ? { shirt: $item`makeshift garbage shirt` }
+            : {}),
+          modifier: "muscle experience, 5 muscle experience percent, -ml",
+          avoid: Item.all().filter((item) => getModifier("Monster Level", item) < 0),
+        }),
+        acquire: [{ item: $item`makeshift garbage shirt` }],
+        limit: { tries: 1 },
+      },
+      {
+        name: "Fight Glitch",
+        ready: () => have($item`[glitch season reward name]`),
+        completed: () => get("_glitchMonsterFights") > 0,
+        acquire: [
+          ...$items`gas can, gas balloon, shard of double-ice`.map((it) => ({
+            item: it,
+            price: 1000,
+          })),
+        ],
+        prepare: () => restoreHp(myMaxhp()),
+        do: () => visitUrl("inv_eat.php?pwd&whichitem=10207"),
+        combat: new CombatStrategy().macro(() =>
+          Macro.tryItem($item`gas balloon`)
+            .trySkill($skill`Feel Pride`)
+            .tryItem(...$items`shard of double-ice, gas can`)
+            .attack()
+            .repeat()
+        ),
         limit: { tries: 1 },
       },
       ...duffo(),
       {
         name: "Workshed",
-        completed: () => get("_workshedItemUsed") || getWorkshed() === $item`Asdon Martin keyfob`,
-        do: () => use($item`Asdon Martin keyfob`),
+        completed: () => get("_workshedItemUsed") || getWorkshed() === $item`cold medicine cabinet`,
+        do: () => use($item`cold medicine cabinet`),
         limit: { tries: 1 },
       },
+
       {
         name: "Level",
-        completed: () => myClass() !== $class`Grey Goo` && myLevel() >= 13,
-        do: () => cliExecute("loopcasual goal=level"),
+        completed: () => myClass() !== $class`Grey Goo` && myLevel() >= 14,
+        do: () => cliExecute("loopcasual goal=level levelto=14"),
         limit: { tries: 1 },
       },
       ...kingFreed(),

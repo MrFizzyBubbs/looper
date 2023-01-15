@@ -10,9 +10,8 @@ export function freecandy(): Strategy {
       {
         name: "Garboween",
         after: after,
-        completed: () => get("_fullday_completedGarboween", false) && !canConsume(),
+        completed: () => get("_garboCompleted", "") !== "" && !canConsume(),
         do: () => cliExecuteThrow(`garboween yachtzeechain ${ascend ? "ascend" : ""}`),
-        post: () => set("_fullday_completedGarboween", true),
         limit: { tries: 1 },
         tracking: "Garbo",
       },
@@ -20,6 +19,7 @@ export function freecandy(): Strategy {
         name: "Freecandy",
         after: [...after, "Garboween"],
         completed: () => myAdventures() < 5 || myInebriety() >= stooperInebrietyLimit(),
+        prepare: () => set("freecandy_treatOutfit", "Ceramic Suit"),
         do: () => cliExecuteThrow("freecandy"),
         outfit: {
           familiar: $familiar`Reagnimated Gnome`,
@@ -46,6 +46,7 @@ export function freecandy(): Strategy {
         after: [...after, "Overdrink"],
         ready: () => myInebriety() > stooperInebrietyLimit(),
         completed: () => myAdventures() < 5,
+        prepare: () => set("freecandy_treatOutfit", "Ceramic Suit"),
         do: () => cliExecuteThrow("freecandy"),
         outfit: {
           familiar: $familiar`Reagnimated Gnome`,
@@ -76,13 +77,21 @@ export function freecandy(): Strategy {
         $item`porcelain phantom mask`,
         $item`beholed bedsheet`,
       ],
-      ronin: () => {
-        set("freecandy_treatOutfit", "Ceramic Suit");
-        cliExecuteThrow(`freecandy ${Math.ceil((1000 - myTurncount()) / 5)}`);
+      ronin: {
+        prepare: () => set("freecandy_treatOutfit", "Ceramic Suit"),
+        do: () => cliExecuteThrow(`freecandy ${Math.ceil((1000 - myTurncount()) / 5)}`),
+        outfit: {
+          familiar: $familiar`Reagnimated Gnome`,
+          famequip: $item`gnomish housemaid's kgnee`,
+        },
       },
-      postronin: () => {
-        set("freecandy_treatOutfit", "Ceramic Suit");
-        cliExecuteThrow(`freecandy ${Math.ceil((myAdventures() - 40) / 5)}`);
+      postronin: {
+        prepare: () => set("freecandy_treatOutfit", "Ceramic Suit"),
+        do: () => cliExecuteThrow(`freecandy ${Math.ceil((myAdventures() - 40) / 5)}`),
+        outfit: {
+          familiar: $familiar`Reagnimated Gnome`,
+          famequip: $item`gnomish housemaid's kgnee`,
+        },
       },
     },
   };

@@ -1,13 +1,17 @@
 import { Item } from "kolmafia";
 import { Task } from "../../engine/task";
-import { args } from "../../main";
 import { freecandy } from "./freecandy";
 import { garbo } from "./garbo";
 import { baggo } from "./baggo";
+import { args } from "../../args";
 
 export type Strategy = {
   tasks: (ascend: boolean, after: string[] = []) => Task[];
-  gyou?: { pulls: Item[]; ronin: Task["do"]; postronin: Task["do"] };
+  gyou?: {
+    pulls: Item[];
+    ronin: Pick<Task, "prepare" | "do" | "outfit">;
+    postronin: Pick<Task, "prepare" | "do" | "outfit">;
+  };
 };
 
 export function chooseStrategy(): Strategy {

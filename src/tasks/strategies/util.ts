@@ -1,9 +1,7 @@
-import { Args } from "grimoire-kolmafia";
 import { myAdventures, myInebriety } from "kolmafia";
-import { $familiar, get, set, withProperty } from "libram";
+import { $familiar, get, withProperty } from "libram";
 import { Task } from "../../engine/task";
 import { canConsume, cliExecuteThrow, stooperInebrietyLimit } from "../../lib";
-import { args } from "../../main";
 import { caldera, stooper } from "./common";
 
 function capitalize(word: string): string {
@@ -18,15 +16,15 @@ export function createStrategyTasks(
   command: string,
   overdrunk = false
 ): (ascend: boolean) => Task[] {
-  const argsScriptName = Args.getMetadata(args).scriptName;
   const commandScriptName = getScriptName(command);
 
   return (ascend: boolean) => [
     {
       name: "Garbo Nobarf",
-      completed: () => get(`_${argsScriptName}_completedGarbo`, false) && !canConsume(),
+      completed: () =>
+        (get("_garboCompleted", "") !== "" && !canConsume()) ||
+        myInebriety() >= stooperInebrietyLimit(),
       do: () => cliExecuteThrow(`garbo yachtzeechain nobarf ${ascend ? "ascend" : ""}`),
-      post: () => set(`_${argsScriptName}_completedGarbo`, true),
       limit: { tries: 1 },
       tracking: "Garbo",
     },

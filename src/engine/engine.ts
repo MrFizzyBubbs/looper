@@ -1,17 +1,30 @@
 import { Engine as BaseEngine } from "grimoire-kolmafia";
 import { Task } from "./task";
 import { printProfits, ProfitTracker } from "./profits";
-import { userConfirm } from "kolmafia";
-import { args, completedProperty } from "../main";
-import { $effect, have, set } from "libram";
+import { haveEffect, userConfirm } from "kolmafia";
+import { $effect, have, set, uneffect } from "libram";
+import { args, metadata } from "../args";
+import { debug } from "../lib";
+
+export const completedProperty = `_${metadata.scriptName}_lastCompleted`;
 
 export class Engine extends BaseEngine<never, Task> {
   confirmed = new Set<string>();
   profits: ProfitTracker;
 
-  constructor(tasks: Task[], key: string) {
+  constructor(tasks: Task[], completedTasks: string[], key: string) {
+    const completed_set = new Set<string>(completedTasks.map((n) => n.trim()));
+    // Completed tasks are always completed
+    tasks = tasks.map((task) => {
+      if (completed_set.has(task.name)) return { ...task, completed: () => true };
+      return task;
+    });
     super(tasks);
     this.profits = new ProfitTracker(key);
+
+    for (const task of completed_set) {
+      if (!this.tasks_by_name.has(task)) debug(`Warning: Unknown completedtask ${task}`);
+    }
   }
 
   public available(task: Task): boolean {
@@ -51,6 +64,7 @@ export class Engine extends BaseEngine<never, Task> {
 
   post(task: Task): void {
     super.post(task);
+    if (haveEffect($effect`Beaten Up`) > 3) uneffect($effect`Beaten Up`);
     if (have($effect`Beaten Up`)) throw "Fight was lost; stop.";
   }
 
