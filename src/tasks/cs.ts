@@ -14,7 +14,7 @@ import {
 } from "libram";
 import { getCurrentLeg, Leg, Quest } from "../engine/task";
 import { canAscendNoncasual, createPermOptions } from "../lib";
-import { breakfast, breakStone, duffo, kingFreed, pvp } from "./common";
+import { breakfast, breakStone, duffo, pvp } from "./common";
 import { Strategy } from "./strategies/strategy";
 
 export function csQuest(strategy: Strategy): Quest {
@@ -78,10 +78,9 @@ export function csQuest(strategy: Strategy): Quest {
         },
         limit: { tries: 1 },
       },
-      ...kingFreed(),
       ...breakfast(),
       ...duffo(),
-      ...strategy.tasks(true),
+      ...strategy.tasks(true, ["Breakfast"]),
       ...pvp([]),
     ],
   };

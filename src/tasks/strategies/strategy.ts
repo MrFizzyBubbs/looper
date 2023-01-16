@@ -6,7 +6,7 @@ import { baggo } from "./baggo";
 import { args } from "../../args";
 
 export type Strategy = {
-  tasks: (ascend: boolean, after: string[] = []) => Task[];
+  tasks: (ascend: boolean, after: string[]) => Task[];
   gyou?: {
     pulls: Item[];
     ronin: Pick<Task, "prepare" | "do" | "outfit">;

@@ -51,7 +51,7 @@ import {
 } from "libram";
 import { getCurrentLeg, Leg, Quest, Task } from "../engine/task";
 import { canAscendNoncasual, createPermOptions } from "../lib";
-import { breakfast, breakStone, duffo, kingFreed, pullAll, pvp } from "./common";
+import { breakfast, breakStone, duffo, pullAll, pvp } from "./common";
 import { Strategy } from "./strategies/strategy";
 
 const gear: Task[] = [
@@ -345,9 +345,8 @@ export function gyouQuest(strategy: Strategy): Quest {
         do: () => cliExecute("loopcasual goal=level levelto=14"),
         limit: { tries: 1 },
       },
-      ...kingFreed(),
       ...breakfast(),
-      ...strategy.tasks(true),
+      ...strategy.tasks(true, ["Breakfast"]),
       ...pvp([]),
     ],
   };
