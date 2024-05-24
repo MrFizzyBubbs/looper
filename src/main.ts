@@ -12,6 +12,7 @@ import { get } from "libram";
 import { smolQuest } from "./paths/smol";
 import { postQuest } from "./paths/post";
 import { setStrategy } from "./strategies/strategy";
+import { robotQuest } from "./paths/robot";
 
 const snapshotStart = Snapshot.importOrCreate("Start");
 
@@ -59,6 +60,8 @@ function getQuests(path: string) {
       return [aftercoreQuest(), casualQuest(), postQuest()];
     case "smol":
       return [aftercoreQuest(), smolQuest(), postQuest()];
+    case "robot":
+      return [aftercoreQuest(), robotQuest(), postQuest()];
     case "custom":
       return [aftercoreQuest()];
     case "none":

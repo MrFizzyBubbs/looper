@@ -40,6 +40,6 @@ export function setStrategy(): void {
 }
 
 export function getStrategy(): Strategy {
-  if (_strategy === null) throw "a strategy has not been set";
+  if (_strategy === null) throw "A strategy has not been set";
   return _strategy;
 }

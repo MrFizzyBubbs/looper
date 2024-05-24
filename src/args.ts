@@ -19,6 +19,7 @@ export const args = Args.create("fullday", "A full-day wrapper script.", {
         ["cs", "Community Service"],
         ["casual", "Casual"],
         ["smol", "A Shrunken Adventurer am I"],
+        ["robot", "You, Robot"],
         ["custom", "Jump the gash manually"],
         ["none", "Stay in aftercore"],
       ],
