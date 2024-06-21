@@ -157,6 +157,13 @@ export function breakfast(after: string[] = []): LoopTask[] {
       limit: { tries: 3 },
     },
     {
+      name: "Mayam",
+      after: after,
+      completed: () => get("_mayamSymbolsUsed") !== "",
+      do: () => cliExecute("mayam rings chair meat yam clock"),
+      limit: { tries: 1 },
+    },
+    {
       name: "Breakfast",
       after: after,
       completed: () => get("breakfastCompleted"),
