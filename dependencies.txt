@@ -1,0 +1,5 @@
+https://github.com/Ezandora/Detective-Solver/branches/Release/
+https://github.com/loathers/chrono-collector.git release
+https://github.com/Loathing-Associates-Scripting-Society/garbage-collector.git release
+https://github.com/Loathing-Associates-Scripting-Society/UberPvPOptimizer.git
+https://github.com/soolar/CONSUME.ash/trunk/RELEASE/
