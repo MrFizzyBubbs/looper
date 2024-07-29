@@ -1,3 +1,3 @@
 import { createNoBarfStrategy } from "./util";
 
-export const chrono = createNoBarfStrategy("chrono mode=future", true);
+export const chrono = createNoBarfStrategy("chrono", true);
