@@ -8,12 +8,14 @@ import {
   Item,
   itemAmount,
   itemType,
+  myAdventures,
   myClass,
   myDaycount,
   myFamiliar,
   myFullness,
   myInebriety,
   mySpleenUse,
+  numericModifier,
   Path,
   print,
   putCloset,
@@ -22,8 +24,9 @@ import {
   takeCloset,
   visitUrl,
 } from "kolmafia";
-import { $familiar, $stat, have, Lifestyle, makeByXFunction } from "libram";
+import { $familiar, $item, $stat, clamp, get, have, Lifestyle, makeByXFunction } from "libram";
 import { args } from "./args";
+import { makeValue } from "garbo-lib";
 
 export function debug(message: string, color?: string): void {
   if (color) {
@@ -112,4 +115,29 @@ export function mostRecentPath(): Path | null {
   const pattern = /.+"([\w ]+)"><\/td><\/tr>/;
   const match = pattern.exec(page);
   return match !== null ? Path.get(match[1]) : null;
+}
+
+export const { value: loopValue } = makeValue({
+  itemValues: new Map([[$item`fake hand`, 50000]]),
+});
+
+export function rolloverTurns(): {
+  actual: number;
+  lost: number;
+} {
+  const base =
+    myAdventures() +
+    40 +
+    numericModifier("Adventures") +
+    clamp(2 * get("_resolutionAdv"), 0, 10) +
+    get("_gibbererAdv") +
+    get("_hareAdv");
+
+  return {
+    actual:
+      clamp(base, 0, 200) +
+      (have($item`potato alarm clock`) ? 5 : 0) +
+      (have($item`etched hourglass`) ? 5 : 0),
+    lost: base - clamp(base, 0, 200),
+  };
 }

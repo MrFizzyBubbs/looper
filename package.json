@@ -1,8 +1,8 @@
 {
-  "name": "full-day",
-  "version": "0.1.0",
-  "description": "Full-day wrapper script",
-  "repository": "https://github.com/MrFizzyBubbs/full-day",
+  "name": "bloop",
+  "version": "0.0.0",
+  "description": "MrFizzy(B)ubbs' loop script",
+  "repository": "https://github.com/MrFizzyBubbs/bloop",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

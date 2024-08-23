@@ -1,7 +1,7 @@
 import { Engine, Quest, Task } from "grimoire-kolmafia";
 import { printProfits, ProfitTracker } from "./profits";
-import { haveEffect, userConfirm } from "kolmafia";
-import { $effect, have, Kmail, PropertiesManager, set, uneffect } from "libram";
+import { userConfirm } from "kolmafia";
+import { $effect, get, have, Kmail, PropertiesManager, set, uneffect } from "libram";
 import { args } from "../args";
 import { debug } from "../lib";
 
@@ -60,11 +60,13 @@ export class LoopEngine extends Engine<never, LoopTask> {
 
   post(task: LoopTask): void {
     super.post(task);
-    if (haveEffect($effect`Beaten Up`) > 3) uneffect($effect`Beaten Up`);
-    if (have($effect`Beaten Up`)) throw "Fight was lost; stop.";
+    if (get("_lastCombatLost")) throw "Fight was lost; stop.";
+    if (have($effect`Beaten Up`)) uneffect($effect`Beaten Up`);
   }
 
   destruct(): void {
+    super.destruct();
+
     Kmail.delete(
       Kmail.inbox().filter((k) =>
         [
@@ -75,8 +77,6 @@ export class LoopEngine extends Engine<never, LoopTask> {
         ].includes(k.senderName)
       )
     );
-
-    super.destruct();
     printProfits(this.profits.all());
   }
 
@@ -97,6 +97,5 @@ export class LoopEngine extends Engine<never, LoopTask> {
     });
     set("garbo_yachtzeechain", true);
     set("garbo_candydish", true);
-    set("freecandy_treatOutfit", "Ceramic Suit");
   }
 }

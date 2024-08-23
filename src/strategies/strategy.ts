@@ -15,9 +15,10 @@ export type Strategy = {
 let _strategy: Strategy | null = null;
 
 export function setStrategy(): void {
+  visitUrl("town.php"); // Check if time tower is available
+
   switch (args.major.strategy) {
     case "auto":
-      visitUrl("town.php");
       if (get("timeTowerAvailable")) _strategy = chrono;
       else if (isHalloween()) _strategy = freecandy;
       else _strategy = garbo;
@@ -40,6 +41,6 @@ export function setStrategy(): void {
 }
 
 export function getStrategy(): Strategy {
-  if (_strategy === null) throw "A strategy has not been set";
+  if (_strategy === null) throw new Error("A strategy has not been set.");
   return _strategy;
 }

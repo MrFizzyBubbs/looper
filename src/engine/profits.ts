@@ -9,24 +9,8 @@ import {
   print,
   todayToString,
 } from "kolmafia";
-import { $item, get, Session } from "libram";
-import { numberWithCommas } from "../lib";
-import { makeValue, ValueFunctions } from "garbo-lib";
-
-// Sourced from garbo
-let _valueFunctions: ValueFunctions | undefined = undefined;
-function garboValueFunctions(): ValueFunctions {
-  if (!_valueFunctions) {
-    _valueFunctions = makeValue({
-      itemValues: new Map([[$item`fake hand`, 50000]]),
-    });
-  }
-  return _valueFunctions;
-}
-
-export function garboValue(item: Item): number {
-  return garboValueFunctions().value(item);
-}
+import { get, Session } from "libram";
+import { loopValue, numberWithCommas } from "../lib";
 
 class DailySetting<T> {
   key: string;
@@ -131,7 +115,7 @@ export class ProfitTracker {
       this.records[tag] = { gametime: gametimeToInt(), meat: 0, items: 0, turns: 0, hours: 0 };
     }
 
-    const value = diff.value(garboValue);
+    const value = diff.value(loopValue);
     this.records[tag].meat += value.meat;
     this.records[tag].items += value.items;
     this.records[tag].turns += myTurncount() - this.turns;

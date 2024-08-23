@@ -30,6 +30,7 @@ import {
   wait,
 } from "kolmafia";
 import {
+  $effects,
   $familiar,
   $item,
   $items,
@@ -49,18 +50,6 @@ import { LoopTask } from "../engine/engine";
 
 const astralContainers = $items`astral hot dog dinner, astral six-pack, [10882]carton of astral energy drinks`;
 
-export function checkForTimeTower(): LoopTask {
-  return {
-    name: "Check for Time Tower",
-    completed: () => get("_fullday_timeTowerChecked", false),
-    do: (): void => {
-      visitUrl("town.php");
-      set("_fullday_timeTowerChecked", true);
-    },
-    limit: { tries: 1 },
-  };
-}
-
 export function pullAll(): LoopTask {
   return {
     name: "Pull All",
@@ -74,7 +63,6 @@ export function pullAll(): LoopTask {
 export function breakfast(after: string[] = []): LoopTask[] {
   return [
     breakStone(),
-    checkForTimeTower(),
     {
       name: "Closet Meat",
       after: after,
@@ -157,13 +145,6 @@ export function breakfast(after: string[] = []): LoopTask[] {
       limit: { tries: 3 },
     },
     {
-      name: "Mayam",
-      after: after,
-      completed: () => get("_mayamSymbolsUsed") !== "",
-      do: () => cliExecute("mayam rings chair meat yam clock"),
-      limit: { tries: 1 },
-    },
-    {
       name: "Breakfast",
       after: after,
       completed: () => get("breakfastCompleted"),
@@ -195,9 +176,10 @@ export function batfellow(): LoopTask[] {
         withCloseted($items`mime army shotglass`, () => {
           if (have($item`astral pilsner`, 2)) drink($item`astral pilsner`, 2);
           else if (mallPrice($item`splendid martini`) < 15_000) drink($item`splendid martini`, 2);
-          else throw `Unable to find a suitable booze to kickstart our liver with.`;
+          else throw new Error("Unable to find a suitable booze to kickstart our liver with.");
         });
       },
+      effects: $effects`Ode to Booze`,
       limit: { tries: 1 },
     },
     {
@@ -243,6 +225,7 @@ export function batfellow(): LoopTask[] {
         getRemainingLiver() >= 4 &&
         myFullness() >= 2,
       do: () => drink($item`Doc Clock's thyme cocktail`),
+      effects: $effects`Ode to Booze`,
       limit: { tries: 1 },
     },
     {
@@ -254,6 +237,7 @@ export function batfellow(): LoopTask[] {
         getRemainingLiver() >= 3 &&
         myFullness() >= 1,
       do: () => drink($item`The Mad Liquor`),
+      effects: $effects`Ode to Booze`,
       limit: { tries: 1 },
     },
   ];

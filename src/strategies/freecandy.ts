@@ -9,9 +9,16 @@ export const freecandy: Strategy = {
   name: "freecandy",
   tasks: (ascend: boolean) => [
     {
-      name: "Consume",
+      name: "Require Outfit",
+      completed: () => get("freecandy_treatOutfit") !== "",
+      do: () => {
+        throw new Error("freecandy_treatOutfit preference is not set");
+      },
+    },
+    {
+      name: "CONSUME",
       completed: () => !canConsume(),
-      do: () => cliExecuteThrow(`consume ALL VALUE ${args.minor.halloweenvoa} NOMEAT`),
+      do: () => cliExecuteThrow(`CONSUME ALL VALUE ${args.minor.halloweenvoa} NOMEAT`),
       limit: { tries: 1 },
       tracking: "Garbo",
     },

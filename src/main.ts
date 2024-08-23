@@ -1,14 +1,12 @@
 import { Args, getTasks } from "grimoire-kolmafia";
-import { cliExecute, print } from "kolmafia";
+import { print } from "kolmafia";
 import { args } from "./args";
 import { LoopEngine } from "./engine/engine";
-import { garboValue } from "./engine/profits";
-import { debug, numberWithCommas } from "./lib";
+import { debug, loopValue, numberWithCommas, rolloverTurns } from "./lib";
 import { Snapshot } from "./snapshot";
 import { aftercoreQuest } from "./paths/aftercore";
 import { casualQuest } from "./paths/casual";
 import { csQuest } from "./paths/cs";
-import { get } from "libram";
 import { smolQuest } from "./paths/smol";
 import { postQuest } from "./paths/post";
 import { setStrategy } from "./strategies/strategy";
@@ -36,20 +34,23 @@ export function main(command?: string): void {
     };
   }
 
-  const engine = new LoopEngine(tasks, args.debug.completedtasks?.split(",") ?? [], "fullday");
+  const engine = new LoopEngine(tasks, args.debug.completedtasks?.split(",") ?? [], "bloop");
   try {
     if (args.debug.list) {
       listTasks(engine);
       return;
     }
 
-    updateScripts();
     engine.run();
   } finally {
     engine.destruct();
   }
 
   printFulldaySnapshot();
+
+  const { actual, lost } = rolloverTurns();
+  print(`Will start tomorrow with ${actual} turns (after potato and hourglass)`);
+  print(`Will lose ${lost} turns to rollover`, lost > 0 ? "red" : "black");
 }
 
 function getQuests(path: string) {
@@ -83,13 +84,8 @@ function listTasks(engine: LoopEngine): void {
   }
 }
 
-function updateScripts(): void {
-  if (!get("_svnUpdated")) cliExecute("svn update");
-  if (!get("_gitUpdated")) cliExecute("git update");
-}
-
 function printFulldaySnapshot() {
-  const { meat, items, itemDetails } = Snapshot.current().diff(snapshotStart).value(garboValue);
+  const { meat, items, itemDetails } = Snapshot.current().diff(snapshotStart).value(loopValue);
   const winners = itemDetails.sort((a, b) => b.value - a.value).slice(0, 5);
   const losers = itemDetails.sort((a, b) => b.value - a.value).slice(-5);
 
