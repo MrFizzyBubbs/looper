@@ -17,10 +17,10 @@
   "license": "Apache",
   "dependencies": {
     "core-js": "^3.16.4",
-    "garbo-lib": "^0.0.6",
+    "garbo-lib": "^1.0.0",
     "grimoire-kolmafia": "^0.3.26",
-    "kolmafia": "^5.27711.0",
-    "libram": "^0.8.18"
+    "kolmafia": "^5.28024.0",
+    "libram": "^0.9.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
