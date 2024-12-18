@@ -29570,6 +29570,7 @@ function main_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) 
 
 
 
+
 var snapshotStart = Snapshot.importOrCreate("Start");
 function main(command) {
   var _args$debug$completed, _args$debug$completed2;
@@ -29594,6 +29595,7 @@ function main(command) {
     };
   }
 
+  if (!(0,dist_property.get)("_gitUpdated")) (0,external_kolmafia_.cliExecute)("git update");
   var engine = new LoopEngine(tasks, (_args$debug$completed = (_args$debug$completed2 = args.debug.completedtasks) === null || _args$debug$completed2 === void 0 ? void 0 : _args$debug$completed2.split(",")) !== null && _args$debug$completed !== void 0 ? _args$debug$completed : [], "bloop");
 
   try {
