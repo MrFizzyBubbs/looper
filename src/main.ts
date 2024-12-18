@@ -1,5 +1,5 @@
 import { Args, getTasks } from "grimoire-kolmafia";
-import { print } from "kolmafia";
+import { cliExecute, print } from "kolmafia";
 import { args } from "./args";
 import { LoopEngine } from "./engine/engine";
 import { debug, loopValue, numberWithCommas, rolloverTurns } from "./lib";
@@ -11,6 +11,7 @@ import { smolQuest } from "./paths/smol";
 import { postQuest } from "./paths/post";
 import { setStrategy } from "./strategies/strategy";
 import { robotQuest } from "./paths/robot";
+import { get } from "libram";
 
 const snapshotStart = Snapshot.importOrCreate("Start");
 
@@ -33,6 +34,8 @@ export function main(command?: string): void {
       throw `Abort requested on task ${to_abort.name}`;
     };
   }
+
+  if (!get("_gitUpdated")) cliExecute("git update");
 
   const engine = new LoopEngine(tasks, args.debug.completedtasks?.split(",") ?? [], "bloop");
   try {
