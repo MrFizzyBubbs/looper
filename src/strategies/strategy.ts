@@ -6,6 +6,7 @@ import { LoopTask } from "../engine/engine";
 import { print, visitUrl, wait } from "kolmafia";
 import { get } from "libram";
 import { isHalloween } from "../lib";
+import { crimbo } from "./crimbo";
 
 export type Strategy = {
   name: string;
@@ -34,6 +35,9 @@ export function setStrategy(): void {
       break;
     case "chrono":
       _strategy = chrono;
+      break;
+    case "crimbo":
+      _strategy = crimbo;
       break;
     default:
       throw `Unknown strategy name ${args.major.strategy}`;
