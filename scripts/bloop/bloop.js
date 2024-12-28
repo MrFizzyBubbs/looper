@@ -29095,7 +29095,11 @@ function createNoBarfStrategy(command) {
 ;// CONCATENATED MODULE: ./src/strategies/chrono.ts
 
 var chrono = createNoBarfStrategy("chrono", true);
+;// CONCATENATED MODULE: ./src/strategies/crimbo.ts
+
+var crimbo = createNoBarfStrategy("crimbo", true);
 ;// CONCATENATED MODULE: ./src/strategies/strategy.ts
+
 
 
 
@@ -29124,6 +29128,10 @@ function setStrategy() {
 
     case "chrono":
       _strategy = chrono;
+      break;
+
+    case "crimbo":
+      _strategy = crimbo;
       break;
 
     default:
