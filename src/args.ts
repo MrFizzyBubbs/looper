@@ -10,6 +10,7 @@ export const args = Args.create("bloop", "MrFizzy(B)ubbs' loop script", {
         ["garbo", "Farm meat using garbage-collector"],
         ["freecandy", "Farm Halloween candy using freecandy"],
         ["chrono", "Farm the TTT using chrono-collector"],
+        ["crimbo", ""],
       ],
       default: "auto",
     }),
