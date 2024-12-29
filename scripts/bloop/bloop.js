@@ -27601,7 +27601,7 @@ var args = Args.create("bloop", "MrFizzy(B)ubbs' loop script", {
   major: Args.group("Major Options", {
     strategy: Args.string({
       help: "Farming strategy to use.",
-      options: [["auto", "Automatically choose based on game state"], ["garbo", "Farm meat using garbage-collector"], ["freecandy", "Farm Halloween candy using freecandy"], ["chrono", "Farm the TTT using chrono-collector"]],
+      options: [["auto", "Automatically choose based on game state"], ["garbo", "Farm meat using garbage-collector"], ["freecandy", "Farm Halloween candy using freecandy"], ["chrono", "Farm the TTT using chrono-collector"], ["crimbo", ""]],
       default: "auto"
     }),
     path: Args.string({
