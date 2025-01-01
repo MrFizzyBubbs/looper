@@ -282,6 +282,12 @@ export function breakStone(): LoopTask {
   };
 }
 
+function noPvPStances(): boolean {
+  const page = visitUrl("peevpee.php?place=fight");
+  const pattern = 'Use your <select name="stance"></select>'; // No stances available
+  return new RegExp(pattern).test(page);
+}
+
 export function pvp(after: string[] = []): LoopTask[] {
   return [
     {
@@ -295,7 +301,7 @@ export function pvp(after: string[] = []): LoopTask[] {
       name: "Swagger",
       after: [...after, "Pledge Allegiance"],
       ready: () => hippyStoneBroken(),
-      completed: () => pvpAttacksLeft() === 0,
+      completed: () => pvpAttacksLeft() === 0 || noPvPStances(),
       do: () => {
         cliExecute("unequip");
         cliExecute("UberPvPOptimizer");
