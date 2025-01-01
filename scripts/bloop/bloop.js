@@ -28749,6 +28749,14 @@ function breakStone() {
     }
   };
 }
+
+function noPvPStances() {
+  var page = (0,external_kolmafia_.visitUrl)("peevpee.php?place=fight");
+  var pattern = 'Use your <select name="stance"></select>'; // No stances available
+
+  return new RegExp(pattern).test(page);
+}
+
 function pvp() {
   var after = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   return [{
@@ -28763,7 +28771,7 @@ function pvp() {
     name: "Swagger",
     after: [].concat(common_toConsumableArray(after), ["Pledge Allegiance"]),
     ready: () => (0,external_kolmafia_.hippyStoneBroken)(),
-    completed: () => (0,external_kolmafia_.pvpAttacksLeft)() === 0,
+    completed: () => (0,external_kolmafia_.pvpAttacksLeft)() === 0 || noPvPStances(),
     do: () => {
       (0,external_kolmafia_.cliExecute)("unequip");
       (0,external_kolmafia_.cliExecute)("UberPvPOptimizer");
