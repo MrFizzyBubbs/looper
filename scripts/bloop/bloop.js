@@ -28752,9 +28752,8 @@ function breakStone() {
 
 function noPvPStances() {
   var page = (0,external_kolmafia_.visitUrl)("peevpee.php?place=fight");
-  var pattern = 'Use your <select name="stance"></select>'; // No stances available
-
-  return page.match(new RegExp(pattern)) === null;
+  var pattern = /Use your\s+<select name="stance"><\/select>/;
+  return page.match(pattern) !== null;
 }
 
 function pvp() {
