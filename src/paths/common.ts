@@ -284,8 +284,8 @@ export function breakStone(): LoopTask {
 
 function noPvPStances(): boolean {
   const page = visitUrl("peevpee.php?place=fight");
-  const pattern = 'Use your <select name="stance"></select>'; // No stances available
-  return page.match(new RegExp(pattern)) === null;
+  const pattern = /Use your\s+<select name="stance"><\/select>/;
+  return page.match(pattern) !== null;
 }
 
 export function pvp(after: string[] = []): LoopTask[] {
