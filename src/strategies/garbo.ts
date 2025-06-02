@@ -1,5 +1,5 @@
 import { getWorkshed, inebrietyLimit, Item, myAdventures, myInebriety } from "kolmafia";
-import { $effect, $familiar, $item, get, have, withProperty } from "libram";
+import { $effect, $familiar, $item, get, have, withProperties, withProperty } from "libram";
 import { canConsume, cliExecuteThrow, stooperInebrietyLimit } from "../lib";
 import { caldera, stooper } from "./common";
 import { Strategy } from "./strategy";
@@ -31,7 +31,7 @@ export const garbo: Strategy = {
       name: "Overdrink",
       completed: () => myInebriety() > stooperInebrietyLimit(),
       do: () =>
-        withProperty("spiceMelangeUsed", true, () =>
+        withProperties({ spiceMelangeUsed: true, currentMojoFilters: 3 }, () =>
           cliExecuteThrow(`CONSUME NIGHTCAP ${ascend ? "VALUE 3250" : ""}`)
         ),
       outfit: { familiar: $familiar`Stooper` },

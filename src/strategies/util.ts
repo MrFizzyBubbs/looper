@@ -1,5 +1,5 @@
 import { myAdventures, myInebriety } from "kolmafia";
-import { $familiar, get, withProperty } from "libram";
+import { $familiar, get, withProperties, withProperty } from "libram";
 import { canConsume, cliExecuteThrow, stooperInebrietyLimit } from "../lib";
 import { caldera, stooper } from "./common";
 import { Strategy } from "./strategy";
@@ -39,7 +39,7 @@ export function createNoBarfStrategy(command: string, overdrunk = false): Strate
         name: "Overdrink",
         completed: () => myInebriety() > stooperInebrietyLimit(),
         do: () =>
-          withProperty("spiceMelangeUsed", true, () =>
+          withProperties({ spiceMelangeUsed: true, currentMojoFilters: 3 }, () =>
             cliExecuteThrow(`CONSUME NIGHTCAP ${ascend ? "NOMEAT" : ""}`)
           ),
         outfit: { familiar: $familiar`Stooper` },
