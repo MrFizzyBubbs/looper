@@ -13,7 +13,7 @@ export function postQuest(): LoopQuest {
         name: "Workshed",
         completed: () => getWorkshed() === $item`cold medicine cabinet` || get("_workshedItemUsed"),
         do: (): void => {
-          AsdonMartin.drive($effect`Driving Observantly`, 900);
+          AsdonMartin.drive($effect`Driving Observantly`, 1300);
           use($item`cold medicine cabinet`);
         },
         limit: { tries: 1 },
