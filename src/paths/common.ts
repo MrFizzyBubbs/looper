@@ -23,6 +23,7 @@ import {
   retrieveItem,
   retrievePrice,
   runChoice,
+  takeCloset,
   toInt,
   toUrl,
   use,
@@ -113,16 +114,25 @@ export function breakfast(after: string[] = []): LoopTask[] {
         get("encountersUntilDMTChoice") <=
           $familiar`Machine Elf`.fightsLimit - $familiar`Machine Elf`.fightsToday,
       completed: () => get("lastDMTDuplication") >= myAscensions(),
-      prepare: () => set("choiceAdventure1125", `1&iid=${toInt(args.minor.duplicate)}`),
+      prepare: () => {
+        if (itemAmount(args.minor.duplicate) === 0) takeCloset(1, args.minor.duplicate);
+        set("choiceAdventure1125", `1&iid=${toInt(args.minor.duplicate)}`);
+      },
       do: $location`The Deep Machine Tunnels`,
-      post: () => putCloset(itemAmount(args.minor.duplicate), args.minor.duplicate),
-      acquire: () => [{ item: args.minor.duplicate }],
+      post: () => {
+        // Prevent PvP theft
+        putCloset(itemAmount(args.minor.duplicate), args.minor.duplicate);
+        // Clear these to avoid interrupting garbo
+        set("_lastCombatWon", true);
+        set("_lastCombatLost", false);
+      },
+      acquire: () => [{ item: args.minor.duplicate, price: 0 }],
       choices: { 1119: 4 },
       combat: new CombatStrategy().macro(new Macro().attack().repeat()),
       outfit: {
-        weapon: $item`Fourth of May Cosplay Saber`,
+        weapon: $item`Fourth of May Cosplay Saber, Space Trip safety headphones, keg shield`,
         familiar: $familiar`Machine Elf`,
-        modifier: "muscle, -ml",
+        modifier: "muscle",
       },
       limit: { tries: 6 },
     },

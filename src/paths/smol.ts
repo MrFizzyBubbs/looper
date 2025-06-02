@@ -134,21 +134,6 @@ export function smolQuest(): LoopQuest {
         do: () => cliExecute("loopcasual goal=organ"),
         limit: { tries: 1 },
       },
-      {
-        name: "Duplicate",
-        after: ["Ascend", "Prism", "Pull All"],
-        ready: () => have(args.minor.duplicate),
-        completed: () => get("lastDMTDuplication") === myAscensions(),
-        prepare: () => set("choiceAdventure1125", `1&iid=${toInt(args.minor.duplicate)}`),
-        do: $location`The Deep Machine Tunnels`,
-        post: (): void => {
-          if (have($effect`Beaten Up`)) uneffect($effect`Beaten Up`);
-        },
-        choices: { 1119: 4 },
-        combat: new CombatStrategy().macro(new Macro().attack().repeat()),
-        outfit: { familiar: $familiar`Machine Elf`, modifier: "muscle" },
-        limit: { tries: 6 },
-      },
     ],
   };
 }
