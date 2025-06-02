@@ -9,7 +9,6 @@ import {
   isOnline,
   itemAmount,
   mallPrice,
-  maximize,
   myAscensions,
   myClosetMeat,
   myFullness,
@@ -17,11 +16,9 @@ import {
   myMeat,
   mySign,
   myStorageMeat,
-  numericModifier,
   putCloset,
   pvpAttacksLeft,
   retrieveItem,
-  retrievePrice,
   runChoice,
   takeCloset,
   toInt,
@@ -41,7 +38,6 @@ import {
   getRemainingLiver,
   getRemainingStomach,
   have,
-  haveInCampground,
   Macro,
   set,
 } from "libram";
@@ -130,7 +126,7 @@ export function breakfast(after: string[] = []): LoopTask[] {
       choices: { 1119: 4 },
       combat: new CombatStrategy().macro(new Macro().attack().repeat()),
       outfit: {
-        weapon: $item`Fourth of May Cosplay Saber, Space Trip safety headphones, keg shield`,
+        weapon: $items`Fourth of May Cosplay Saber, Space Trip safety headphones, keg shield`,
         familiar: $familiar`Machine Elf`,
         modifier: "muscle",
       },
@@ -316,41 +312,6 @@ export function pvp(after: string[] = []): LoopTask[] {
         cliExecute("unequip");
         cliExecute("UberPvPOptimizer");
         cliExecute("swagger");
-      },
-      limit: { tries: 1 },
-    },
-  ];
-}
-
-export function endOfDay(after: string[] = []): LoopTask[] {
-  return [
-    {
-      name: "Raffle",
-      after: after,
-      completed: () => have($item`raffle ticket`),
-      do: () => cliExecute(`raffle ${Math.random() * 10 + 1}`),
-      limit: { tries: 1 },
-    },
-    {
-      name: "Pajamas",
-      after: after,
-      completed: () =>
-        maximize("adv, switch tot, switch left-hand man, switch disembodied hand", true) &&
-        numericModifier("Generated:_spec", "Adventures") <= numericModifier("Adventures"),
-      prepare: () => cliExecute("refresh all"),
-      do: () => maximize("adv, switch tot, switch left-hand man, switch disembodied hand", false),
-      limit: { tries: 1 },
-    },
-    {
-      name: "Clockwork Maid",
-      after: after,
-      completed: () =>
-        haveInCampground($item`clockwork maid`) ||
-        numericModifier($item`clockwork maid`, "Adventures") * get("valueOfAdventure") <
-          retrievePrice($item`clockwork maid`),
-      do: (): void => {
-        retrieveItem($item`clockwork maid`);
-        use($item`clockwork maid`);
       },
       limit: { tries: 1 },
     },

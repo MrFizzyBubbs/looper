@@ -1,9 +1,10 @@
-import { cliExecute, myAdventures, myPath, visitUrl } from "kolmafia";
-import { $item, $path, $skill, ascend, get, have, Lifestyle, prepareAscension } from "libram";
-import { ascendedToday, byAscendingStat, createPermOptions } from "../lib";
-import { breakStone, duffo } from "./common";
+import { step } from "grimoire-kolmafia";
+import { cliExecute, myPath, visitUrl } from "kolmafia";
+import { $item, $path, $skill, ascend, have, Lifestyle, prepareAscension } from "libram";
 import { args } from "../args";
 import { LoopQuest } from "../engine/engine";
+import { ascendedToday, byAscendingStat, createPermOptions } from "../lib";
+import { breakStone, duffo } from "./common";
 
 export function casualQuest(): LoopQuest {
   return {
@@ -15,7 +16,7 @@ export function casualQuest(): LoopQuest {
         do: (): void => {
           prepareAscension({
             garden: "packet of thanksgarden seeds",
-            eudora: "New-You Club Membership Form",
+            eudora: "GameInformPowerDailyPro subscription card",
             chateau: {
               desk: "Swiss piggy bank",
               nightstand: byAscendingStat({
@@ -44,16 +45,19 @@ export function casualQuest(): LoopQuest {
       {
         name: "Run",
         ready: () => myPath() === $path`none`,
-        completed: () => get("kingLiberated") && have($skill`Liver of Steel`),
+        completed: () => step("questL13Final") > 11 && have($skill`Liver of Steel`),
         do: (): void => {
-          cliExecute("loopcasual fluffers=false stomach=15 workshed='Asdon Martin keyfob'");
-          if (myAdventures() === 0 && !have($skill`Liver of Steel`)) {
-            cliExecute("cast 2 ancestral recall");
-            cliExecute("loopcasual fluffers=false stomach=15");
-          }
+          cliExecute("loopstar workshed='Asdon Martin keyfob'");
         },
         limit: { tries: 1 },
         tracking: "Run",
+      },
+      {
+        name: "Prism",
+        completed: () => step("questL13Final") === 999,
+        do: () => visitUrl("place.php?whichplace=nstower&action=ns_11_prism"),
+        limit: { tries: 1 },
+        tracking: "Ignore",
       },
     ],
   };

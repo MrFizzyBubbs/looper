@@ -1,5 +1,5 @@
 import { getWorkshed, inebrietyLimit, Item, myAdventures, myInebriety } from "kolmafia";
-import { $effect, $familiar, $item, get, have, withProperties, withProperty } from "libram";
+import { $effect, $familiar, $item, get, have, withProperties } from "libram";
 import { canConsume, cliExecuteThrow, stooperInebrietyLimit } from "../lib";
 import { caldera, stooper } from "./common";
 import { Strategy } from "./strategy";

@@ -25,11 +25,11 @@ export function robotQuest(): LoopQuest {
           visitUrl("council.php"); // Collect thwaitgold
           ascend({
             path: $path`You, Robot`,
-            playerClass: $class`Pastamancer`,
+            playerClass: $class`Seal Clubber`,
             lifestyle: Lifestyle.softcore,
             moon: "vole",
             consumable: $item`astral six-pack`,
-            pet: $item`astral mask`,
+            pet: $item`astral pet sweater`,
             permOptions: createPermOptions(),
           });
           set("choiceAdventure1446", 1);
@@ -54,6 +54,7 @@ export function robotQuest(): LoopQuest {
         limit: { tries: 1 },
         tracking: "Ignore",
       },
+      // TODO apriling, organ
     ],
   };
 }

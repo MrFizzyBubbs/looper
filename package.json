@@ -1,8 +1,8 @@
 {
-  "name": "bloop",
+  "name": "looper",
   "version": "0.0.0",
-  "description": "MrFizzy(B)ubbs' loop script",
-  "repository": "https://github.com/MrFizzyBubbs/bloop",
+  "description": "MrFizzyBubbs' full-day looping script",
+  "repository": "https://github.com/MrFizzyBubbs/looper",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,17 +10,17 @@
     "build:types": "tsc",
     "build:js": "webpack",
     "lint": "eslint src && prettier --check .",
-    "lint:fix": "eslint src --fix && prettier --check --write .",
+    "lint:fix": "eslint src --fix && prettier --write .",
     "watch": "webpack --watch --progress"
   },
   "author": "MrFizzyBubbs",
   "license": "Apache",
   "dependencies": {
     "core-js": "^3.16.4",
-    "garbo-lib": "^1.0.0",
-    "grimoire-kolmafia": "^0.3.26",
-    "kolmafia": "^5.28024.0",
-    "libram": "^0.9.4"
+    "garbo-lib": "^1.0.2",
+    "grimoire-kolmafia": "^0.3.29",
+    "kolmafia": "^5.28546.0",
+    "libram": "^0.11.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
@@ -34,7 +34,7 @@
     "babel-loader": "^8.2.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-libram": "^0.3.5",
+    "eslint-plugin-libram": "^0.4.27",
     "prettier": "^2.3.2",
     "typescript": "^4.4.2",
     "webpack": "^5.51.1",

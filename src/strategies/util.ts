@@ -1,5 +1,5 @@
 import { myAdventures, myInebriety } from "kolmafia";
-import { $familiar, get, withProperties, withProperty } from "libram";
+import { $familiar, get, withProperties } from "libram";
 import { canConsume, cliExecuteThrow, stooperInebrietyLimit } from "../lib";
 import { caldera, stooper } from "./common";
 import { Strategy } from "./strategy";

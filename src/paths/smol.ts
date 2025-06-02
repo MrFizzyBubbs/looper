@@ -1,36 +1,30 @@
-import { CombatStrategy, step } from "grimoire-kolmafia";
+import { step } from "grimoire-kolmafia";
 import {
   buy,
   cliExecute,
   inebrietyLimit,
-  myAscensions,
   myFullness,
   myInebriety,
   myPath,
   retrieveItem,
   runChoice,
-  toInt,
   use,
   useSkill,
   visitUrl,
 } from "kolmafia";
 import {
   $effect,
-  $familiar,
   $item,
-  $location,
   $path,
   $skill,
+  AprilingBandHelmet,
   ascend,
   get,
   getRemainingLiver,
   getRemainingStomach,
   have,
   Lifestyle,
-  Macro,
   prepareAscension,
-  set,
-  uneffect,
 } from "libram";
 import { args } from "../args";
 import { LoopQuest } from "../engine/engine";
@@ -81,7 +75,7 @@ export function smolQuest(): LoopQuest {
       {
         name: "Run",
         completed: () => step("questL13Final") > 11,
-        do: () => cliExecute("loopsmol"),
+        do: () => cliExecute("loopstar"),
         limit: { tries: 1 },
         tracking: "Run",
       },
@@ -90,6 +84,7 @@ export function smolQuest(): LoopQuest {
         completed: () => myPath() !== $path`A Shrunken Adventurer am I`,
         do: () => visitUrl("place.php?whichplace=nstower&action=ns_11_prism"),
         limit: { tries: 1 },
+        tracking: "Ignore",
       },
       pullAll(),
       {
@@ -97,7 +92,7 @@ export function smolQuest(): LoopQuest {
         after: ["Ascend", "Prism", "Pull All"],
         completed: () =>
           (getRemainingStomach() >= 0 && getRemainingLiver() >= 0) ||
-          myInebriety() > inebrietyLimit() + 5,
+          myInebriety() > inebrietyLimit() + 3,
         do: (): void => {
           if (myFullness() >= 3 && myInebriety() >= 3 && !get("spiceMelangeUsed")) {
             if (!have($item`spice melange`)) buy($item`spice melange`, 600000);
@@ -128,10 +123,21 @@ export function smolQuest(): LoopQuest {
         limit: { tries: 1 },
       },
       {
+        name: "Reset Apriling",
+        after: ["Ascend", "Prism", "Pull All"],
+        completed: () =>
+          !AprilingBandHelmet.have() ||
+          !AprilingBandHelmet.canChangeSong() ||
+          have($effect`Apriling Band Celebration Bop`),
+        do: () => AprilingBandHelmet.changeSong("Apriling Band Celebration Bop"),
+        limit: { tries: 1 },
+        tracking: "Run",
+      },
+      {
         name: "Organ",
         after: ["Ascend", "Prism", "Pull All", "Uneat"],
         completed: () => have($skill`Liver of Steel`),
-        do: () => cliExecute("loopcasual goal=organ"),
+        do: () => cliExecute("loopstar goal=organ"),
         limit: { tries: 1 },
       },
     ],

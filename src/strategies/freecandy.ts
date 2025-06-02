@@ -1,5 +1,5 @@
 import { myAdventures, myInebriety } from "kolmafia";
-import { $familiar, get, withProperties, withProperty } from "libram";
+import { $familiar, get, withProperties } from "libram";
 import { canConsume, cliExecuteThrow, stooperInebrietyLimit } from "../lib";
 import { caldera, stooper } from "./common";
 import { Strategy } from "./strategy";
@@ -27,7 +27,7 @@ export const freecandy: Strategy = {
       completed: () =>
         (get("_garboCompleted", "") !== "" && !canConsume()) ||
         myInebriety() >= stooperInebrietyLimit(),
-      do: () => cliExecuteThrow(`garbo nobarf ${ascend ? "ascend" : ""}`),
+      do: () => cliExecuteThrow(`garbo nobarf target='witchess knight' ${ascend ? "ascend" : ""}`),
       limit: { tries: 1 },
       tracking: "Garbo",
     },
