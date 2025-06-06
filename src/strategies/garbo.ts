@@ -5,8 +5,11 @@ import { caldera, stooper } from "./common";
 import { Strategy } from "./strategy";
 
 function chooseWorkshed(): Item {
-  if (getWorkshed() !== $item`Asdon Martin keyfob` && !have($effect`Driving Observantly`)) {
-    return $item`Asdon Martin keyfob`;
+  if (
+    getWorkshed() !== $item`Asdon Martin keyfob (on ring)` &&
+    !have($effect`Driving Observantly`)
+  ) {
+    return $item`Asdon Martin keyfob (on ring)`;
   }
   if (getWorkshed() !== $item`cold medicine cabinet`) {
     return $item`cold medicine cabinet`;
