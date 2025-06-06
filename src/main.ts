@@ -37,7 +37,7 @@ export function main(command?: string): void {
 
   if (!get("_gitUpdated")) cliExecute("git update");
 
-  const engine = new LoopEngine(tasks, args.debug.completedtasks?.split(",") ?? [], "bloop");
+  const engine = new LoopEngine(tasks, args.debug.completedtasks?.split(",") ?? [], "looper");
   try {
     if (args.debug.list) {
       listTasks(engine);

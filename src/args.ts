@@ -1,7 +1,7 @@
 import { Args } from "grimoire-kolmafia";
 import { $class, $item } from "libram";
 
-export const args = Args.create("bloop", "MrFizzy(B)ubbs' loop script", {
+export const args = Args.create("looper", "MrFizzyBubbs' full-day script", {
   major: Args.group("Major Options", {
     strategy: Args.string({
       help: "Farming strategy to use.",
