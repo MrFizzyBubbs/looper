@@ -1,6 +1,6 @@
-https://github.com/Ezandora/Detective-Solver.git master
-https://github.com/loathers/crimbo.git release
-https://github.com/loathers/chrono-collector.git release
-https://github.com/loathers/garbage-collector.git release
-https://github.com/loathers/UberPvPOptimizer.git master
-https://github.com/soolar/CONSUME.ash.git master
+github Ezandora/Detective-Solver
+github loathers/crimbo release
+github loathers/chrono-collector release
+github loathers/garbage-collector release
+github loathers/UberPvPOptimizer master
+github soolar/CONSUME.ash
