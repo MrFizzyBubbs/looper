@@ -4,13 +4,7 @@ import { args } from "./args";
 import { LoopEngine } from "./engine/engine";
 import { debug, loopValue, numberWithCommas, rolloverTurns } from "./lib";
 import { Snapshot } from "./snapshot";
-import { aftercoreQuest } from "./paths/aftercore";
-import { casualQuest } from "./paths/casual";
-import { csQuest } from "./paths/cs";
-import { smolQuest } from "./paths/smol";
-import { postQuest } from "./paths/post";
-import { setStrategy } from "./strategies/strategy";
-import { robotQuest } from "./paths/robot";
+import { planDay } from "./day";
 import { get } from "libram";
 
 const snapshotStart = Snapshot.importOrCreate("Start");
@@ -22,9 +16,7 @@ export function main(command?: string): void {
     return;
   }
 
-  setStrategy();
-  const quests = getQuests(args.major.path);
-  const tasks = getTasks(quests);
+  const tasks = getTasks(planDay().quests);
 
   // Abort during the prepare() step of the specified task
   if (args.debug.abort) {
@@ -54,25 +46,6 @@ export function main(command?: string): void {
   const { actual, lost } = rolloverTurns();
   print(`Will start tomorrow with ${actual} turns (after potato and hourglass)`);
   print(`Will lose ${lost} turns to rollover`, lost > 0 ? "red" : "black");
-}
-
-function getQuests(path: string) {
-  switch (path) {
-    case "cs":
-      return [aftercoreQuest(), csQuest(), postQuest()];
-    case "casual":
-      return [aftercoreQuest(), casualQuest(), postQuest()];
-    case "smol":
-      return [aftercoreQuest(), smolQuest(), postQuest()];
-    case "robot":
-      return [aftercoreQuest(), robotQuest(), postQuest()];
-    case "custom":
-      return [aftercoreQuest()];
-    case "none":
-      return [postQuest()];
-    default:
-      throw `Unknown run type ${path}`;
-  }
 }
 
 function listTasks(engine: LoopEngine): void {

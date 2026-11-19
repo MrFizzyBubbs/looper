@@ -19,10 +19,10 @@ import {
   haveInCampground,
 } from "libram";
 import { LoopQuest } from "../engine/engine";
-import { getStrategy } from "../strategies/strategy";
+import { Strategy } from "../strategies/strategy";
 import { batfellow, breakfast, duffo, pullAll } from "./common";
 
-export function postQuest(): LoopQuest {
+export function postQuest(strategy: Strategy): LoopQuest {
   return {
     name: "Post",
     tasks: [
@@ -39,7 +39,7 @@ export function postQuest(): LoopQuest {
       ...breakfast(),
       ...duffo(),
       ...batfellow(),
-      ...getStrategy().tasks(false),
+      ...strategy.tasks(false),
       {
         name: "Raffle",
         completed: () => have($item`raffle ticket`),
