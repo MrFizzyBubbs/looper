@@ -1,6 +1,7 @@
-import { myAdventures, myInebriety } from "kolmafia";
+import { myAdventures } from "kolmafia";
 import { $familiar, get, withProperties } from "libram";
-import { canConsume, cliExecuteThrow, stooperInebrietyLimit } from "../lib";
+import { cliExecuteThrow } from "../lib";
+import { areOrgansFull, isOverdrunk, isStooperDrunk } from "../organs";
 import { caldera, stooper } from "./common";
 import { Strategy } from "./strategy";
 import { args } from "../args";
@@ -17,23 +18,21 @@ export const freecandy: Strategy = {
     },
     {
       name: "CONSUME",
-      completed: () => !canConsume(),
+      completed: () => areOrgansFull(),
       do: () => cliExecuteThrow(`CONSUME ALL VALUE ${args.minor.halloweenvoa} NOMEAT`),
       limit: { tries: 1 },
       tracking: "Garbo",
     },
     {
       name: "Garbo Nobarf",
-      completed: () =>
-        (get("_garboCompleted", "") !== "" && !canConsume()) ||
-        myInebriety() >= stooperInebrietyLimit(),
+      completed: () => (get("_garboCompleted", "") !== "" && areOrgansFull()) || isStooperDrunk(),
       do: () => cliExecuteThrow(`garbo nobarf target='witchess knight' ${ascend ? "ascend" : ""}`),
       limit: { tries: 1 },
       tracking: "Garbo",
     },
     {
       name: "Freecandy",
-      completed: () => myAdventures() < 5 || myInebriety() >= stooperInebrietyLimit(),
+      completed: () => myAdventures() < 5 || isStooperDrunk(),
       do: () => cliExecuteThrow("freecandy"),
       outfit: {
         familiar: $familiar`Reagnimated Gnome`,
@@ -44,7 +43,7 @@ export const freecandy: Strategy = {
     stooper(),
     {
       name: "Overdrink",
-      completed: () => myInebriety() > stooperInebrietyLimit(),
+      completed: () => isOverdrunk(),
       do: () =>
         withProperties({ spiceMelangeUsed: true, currentMojoFilters: 3 }, () =>
           cliExecuteThrow(
@@ -57,7 +56,7 @@ export const freecandy: Strategy = {
     ...(ascend ? [caldera()] : []),
     {
       name: "Overdrunk",
-      ready: () => myInebriety() > stooperInebrietyLimit(),
+      ready: () => isOverdrunk(),
       completed: () => myAdventures() < 5,
       do: () => cliExecuteThrow("freecandy"),
       outfit: {

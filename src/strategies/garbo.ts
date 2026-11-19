@@ -1,6 +1,7 @@
-import { getWorkshed, inebrietyLimit, Item, myAdventures, myInebriety } from "kolmafia";
+import { getWorkshed, Item, myAdventures } from "kolmafia";
 import { $effect, $familiar, $item, get, have, withProperties } from "libram";
-import { canConsume, cliExecuteThrow, stooperInebrietyLimit } from "../lib";
+import { cliExecuteThrow } from "../lib";
+import { areOrgansFull, isOverdrunk, isStooperDrunk } from "../organs";
 import { caldera, stooper } from "./common";
 import { Strategy } from "./strategy";
 
@@ -23,8 +24,8 @@ export const garbo: Strategy = {
     {
       name: "Garbo",
       completed: () =>
-        (get("_garboCompleted", "") !== "" && myAdventures() === 0 && !canConsume()) ||
-        myInebriety() >= stooperInebrietyLimit(),
+        (get("_garboCompleted", "") !== "" && myAdventures() === 0 && areOrgansFull()) ||
+        isStooperDrunk(),
       do: () => cliExecuteThrow(`garbo ${ascend ? "ascend" : ""} workshed="${chooseWorkshed()}"`),
       limit: { tries: 1 },
       tracking: "Garbo",
@@ -32,7 +33,7 @@ export const garbo: Strategy = {
     stooper(),
     {
       name: "Overdrink",
-      completed: () => myInebriety() > stooperInebrietyLimit(),
+      completed: () => isOverdrunk(),
       do: () =>
         withProperties({ spiceMelangeUsed: true, currentMojoFilters: 3 }, () =>
           cliExecuteThrow(`CONSUME NIGHTCAP ${ascend ? "VALUE 3250" : ""}`)
@@ -45,7 +46,7 @@ export const garbo: Strategy = {
           caldera(),
           {
             name: "Overdrunk",
-            ready: () => myInebriety() > inebrietyLimit(),
+            ready: () => isOverdrunk(),
             completed: () => myAdventures() === 0,
             do: () => cliExecuteThrow("garbo ascend"),
             limit: { tries: 1 },

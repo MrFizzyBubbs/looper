@@ -1,32 +1,24 @@
 import {
   Class,
   cliExecute,
-  fullnessLimit,
   getPermedSkills,
   holiday,
-  inebrietyLimit,
   Item,
   itemAmount,
   itemType,
   myAdventures,
   myClass,
   myDaycount,
-  myFamiliar,
-  myFullness,
-  myInebriety,
-  mySpleenUse,
   numericModifier,
   Path,
   print,
   putCloset,
   runCombat,
   Skill,
-  spleenLimit,
   takeCloset,
   visitUrl,
 } from "kolmafia";
 import {
-  $familiar,
   $item,
   $monster,
   $stat,
@@ -58,18 +50,6 @@ export function isDMTDuplicable(item: Item): boolean {
 
 export function canPickpocket(class_: Class = myClass()): boolean {
   return class_.primestat === $stat`Moxie`;
-}
-
-export function canConsume(): boolean {
-  return (
-    myFullness() < fullnessLimit() ||
-    myInebriety() < inebrietyLimit() ||
-    mySpleenUse() < spleenLimit()
-  );
-}
-
-export function stooperInebrietyLimit(): number {
-  return inebrietyLimit() + Number(myFamiliar() !== $familiar`Stooper`);
 }
 
 export function numberWithCommas(x: number): string {

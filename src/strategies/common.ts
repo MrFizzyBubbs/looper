@@ -1,7 +1,7 @@
 import { CombatStrategy } from "grimoire-kolmafia";
-import { bjornifyFamiliar, cliExecute, myInebriety, useSkill } from "kolmafia";
+import { bjornifyFamiliar, cliExecute, useSkill } from "kolmafia";
 import { $effect, $familiar, $item, $location, $skill, get, Macro, uneffect } from "libram";
-import { canConsume, stooperInebrietyLimit } from "../lib";
+import { areOrgansFull, isStooperDrunk } from "../organs";
 import { LoopTask } from "../engine/engine";
 
 function distillateAdvs(): number {
@@ -11,8 +11,8 @@ function distillateAdvs(): number {
 export function stooper(): LoopTask {
   return {
     name: "Stooper",
-    ready: () => distillateAdvs() >= 9 && !canConsume(), // Check organs just to be safe
-    completed: () => myInebriety() >= stooperInebrietyLimit(),
+    ready: () => distillateAdvs() >= 9 && areOrgansFull(),
+    completed: () => isStooperDrunk(),
     do: () => cliExecute("drink stillsuit distillate"),
     limit: { tries: 1 },
   };

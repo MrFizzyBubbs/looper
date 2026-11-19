@@ -1,6 +1,7 @@
-import { myAdventures, myInebriety } from "kolmafia";
+import { myAdventures } from "kolmafia";
 import { $familiar, get, withProperties } from "libram";
-import { canConsume, cliExecuteThrow, stooperInebrietyLimit } from "../lib";
+import { cliExecuteThrow } from "../lib";
+import { areOrgansFull, isOverdrunk, isStooperDrunk } from "../organs";
 import { caldera, stooper } from "./common";
 import { Strategy } from "./strategy";
 
@@ -20,16 +21,14 @@ export function createNoBarfStrategy(command: string, overdrunk = false): Strate
     tasks: (ascend: boolean) => [
       {
         name: "Garbo Nobarf",
-        completed: () =>
-          (get("_garboCompleted", "") !== "" && !canConsume()) ||
-          myInebriety() >= stooperInebrietyLimit(),
+        completed: () => (get("_garboCompleted", "") !== "" && areOrgansFull()) || isStooperDrunk(),
         do: () => cliExecuteThrow(`garbo nobarf ${ascend ? "ascend" : ""}`),
         limit: { tries: 1 },
         tracking: "Garbo",
       },
       {
         name: scriptName,
-        completed: () => myAdventures() === 0 || myInebriety() >= stooperInebrietyLimit(),
+        completed: () => myAdventures() === 0 || isStooperDrunk(),
         do: () => cliExecuteThrow(command),
         limit: { tries: 1 },
         tracking: scriptName,
@@ -37,7 +36,7 @@ export function createNoBarfStrategy(command: string, overdrunk = false): Strate
       stooper(),
       {
         name: "Overdrink",
-        completed: () => myInebriety() > stooperInebrietyLimit(),
+        completed: () => isOverdrunk(),
         do: () =>
           withProperties({ spiceMelangeUsed: true, currentMojoFilters: 3 }, () =>
             cliExecuteThrow(`CONSUME NIGHTCAP ${ascend ? "NOMEAT" : ""}`)
@@ -50,7 +49,7 @@ export function createNoBarfStrategy(command: string, overdrunk = false): Strate
             caldera(),
             {
               name: "Overdrunk",
-              ready: () => myInebriety() > stooperInebrietyLimit(),
+              ready: () => isOverdrunk(),
               completed: () => myAdventures() === 0,
               do: () => cliExecuteThrow(overdrunk ? command : "garbo ascend"),
               limit: { tries: 1 },
